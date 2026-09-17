@@ -1,1 +1,1153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BnB Alama: exam marks into teaching decisions</title>
+<meta name="description" content="Tag each exam question by topic and skill, enter marks, and see what your class needs retaught. Built for Tanzanian secondary teachers.">
+<meta property="og:title" content="BnB Alama">
+<meta property="og:description" content="Turn exam marks into teaching decisions. Free, and marks never leave your device.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1B2A4A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231B2A4A'/%3E%3Cpath d='M7 17l6 6L25 9' fill='none' stroke='%23FF7D72' stroke-width='3.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F5FA;
+  --surface:#FFFFFF;
+  --rule:#D7DFEB;
+  --rule-strong:#B6C3D7;
+  --ink:#1B2A4A;
+  --ink-soft:#55637C;
+  --pen:#C22F2A;
+  --pen-soft:#F8E0DE;
+  --good:#1F6E4A;
+  --warn-soft:#F7EAD2;
+  --bar:#2F5597;
+  --bar-track:#E1E7F1;
+  --focus:#2F5597;
+  --gA:#1F6E4A; --gB:#6AA487; --gC:#2F5597; --gD:#D39A38; --gF:#C22F2A;
+  --font:"Atkinson Hyperlegible","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --hand:"Kalam","Segoe Print","Bradley Hand",cursive;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#141E33; --surface:#1B2742; --rule:#2C3B5A; --rule-strong:#40527A;
+    --ink:#E5EBF6; --ink-soft:#A6B2C8; --pen:#FF7D72; --pen-soft:#4A2631;
+    --good:#62C795; --warn-soft:#3F3320; --bar:#80A7EF; --bar-track:#283757; --focus:#80A7EF;
+    --gA:#62C795; --gB:#3E8B67; --gC:#80A7EF; --gD:#E2AA4F; --gF:#FF7D72;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141E33; --surface:#1B2742; --rule:#2C3B5A; --rule-strong:#40527A;
+  --ink:#E5EBF6; --ink-soft:#A6B2C8; --pen:#FF7D72; --pen-soft:#4A2631;
+  --good:#62C795; --warn-soft:#3F3320; --bar:#80A7EF; --bar-track:#283757; --focus:#80A7EF;
+  --gA:#62C795; --gB:#3E8B67; --gC:#80A7EF; --gD:#E2AA4F; --gF:#FF7D72;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+h1{font-size:1.85rem;line-height:1.15;margin:0 0 6px;letter-spacing:-.01em}
+h2{font-size:1.12rem;line-height:1.3;margin:0 0 8px}
+p{margin:0 0 10px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.muted{color:var(--ink-soft);font-weight:400}
+.hint{color:var(--ink-soft);font-size:.92rem;max-width:72ch}
+.lead{color:var(--ink-soft);margin:16px 0}
 
+/* header */
+header.top{background:var(--surface);border-bottom:1px solid var(--rule)}
+.top-row{display:flex;align-items:center;gap:12px 20px;flex-wrap:wrap;padding:12px 0 4px}
+.brand{display:flex;align-items:baseline;gap:10px;margin-right:auto}
+.brand b{font-size:1.45rem;letter-spacing:-.01em;display:flex;align-items:center;gap:6px}
+.brand svg{width:26px;height:26px;align-self:center}
+.brand span{color:var(--ink-soft);font-size:.92rem}
+.paper-pick{display:flex;align-items:center;gap:8px}
+.paper-pick label{color:var(--ink-soft);font-size:.9rem}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-bottom:-1px}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 12px 9px;color:var(--ink-soft);cursor:pointer;white-space:nowrap}
+nav.tabs button:hover{color:var(--ink)}
+nav.tabs button[aria-current="page"]{color:var(--ink);border-bottom-color:var(--pen);font-weight:700}
+
+select,input[type=text],input[type=date]{background:var(--surface);border:1px solid var(--rule-strong);border-radius:6px;padding:6px 10px;min-height:38px;max-width:100%}
+input[aria-invalid="true"]{border-color:var(--pen);background:var(--pen-soft)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--rule-strong);background:var(--surface);border-radius:6px;padding:6px 14px;min-height:38px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:var(--ink-soft)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.primary{background:var(--ink);color:var(--surface);border-color:var(--ink);font-weight:700}
+.btn.danger{color:var(--pen);border-color:var(--pen)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--ink-soft)}
+.btn.ghost:hover{color:var(--pen);border-color:transparent}
+.btn.small{min-height:32px;padding:3px 10px;font-size:.9rem}
+.btn-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.link{background:none;border:0;padding:0;font-weight:700;color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer;text-align:left}
+
+.banner{background:var(--warn-soft);border-bottom:1px solid var(--rule)}
+.banner .wrap{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px}
+.banner p{margin:0;margin-right:auto;max-width:70ch}
+
+main{padding-bottom:48px}
+.block{padding:26px 0 24px;border-bottom:1px solid var(--rule)}
+.block:last-child{border-bottom:0}
+.split{display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px 16px;margin:14px 0 4px;max-width:1000px}
+.fields label{display:flex;flex-direction:column;gap:4px;font-size:.9rem;color:var(--ink-soft)}
+.fields input,.fields select{color:var(--ink);width:100%}
+.empty{padding:56px 0;max-width:60ch}
+.empty p{color:var(--ink-soft)}
+
+/* tables */
+.table-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:8px;margin-top:10px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:8px 12px;border-bottom:1px solid var(--rule);text-align:left;white-space:nowrap;vertical-align:middle}
+tbody tr:last-child td,tbody tr:last-child th{border-bottom:0}
+thead th{font-size:.86rem;color:var(--ink-soft);font-weight:700}
+.num{text-align:right}
+tr.current td:first-child{box-shadow:inset 3px 0 0 var(--pen)}
+.row-actions{text-align:right}
+h2.group{margin-top:22px}
+.qtable input{width:100%}
+.w-no{width:5rem!important}
+.w-topic{min-width:14rem}
+.w-max{width:6rem!important;text-align:right}
+dl.skills{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px 24px;margin:10px 0 0}
+dl.skills dt{font-weight:700}
+dl.skills dd{margin:0;color:var(--ink-soft);font-size:.92rem}
+
+/* marks grid */
+.add-row{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap;margin:12px 0}
+.add-row label{display:flex;flex-direction:column;gap:4px;font-size:.9rem;color:var(--ink-soft)}
+.grid-wrap{overflow:auto;max-height:72vh;border:1px solid var(--rule);border-radius:8px;background:var(--surface)}
+table.grid{border-collapse:separate;border-spacing:0;width:auto;min-width:100%}
+.grid th,.grid td{padding:0;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule)}
+.grid thead th{position:sticky;top:0;background:var(--surface);z-index:2;padding:6px 8px;text-align:center;line-height:1.2}
+.grid .stu{position:sticky;left:0;background:var(--surface);z-index:1}
+.grid thead th.stu{z-index:3;text-align:left;padding-left:10px}
+.qno{display:block;color:var(--ink);font-size:.95rem}
+.qmax{display:block;font-weight:400;font-size:.8rem}
+.grid input{width:4.2rem;border:0;border-radius:0;background:transparent;text-align:center;padding:8px 4px;min-height:40px}
+.grid input.label{width:7.5rem;text-align:left;padding-left:10px;font-weight:700}
+.grid input:focus{outline:2px solid var(--focus);outline-offset:-2px;background:var(--bar-track)}
+.grid input[aria-invalid="true"]{background:var(--pen-soft);color:var(--pen);font-weight:700}
+.grid td.tot{padding:0 12px;text-align:right;font-weight:700;white-space:nowrap}
+.grid th.tot{min-width:6.5rem}
+#gridMsg{min-height:1.5em;margin-top:8px;color:var(--pen);font-weight:700}
+
+/* report: the exercise-book page */
+.picker{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;margin-top:22px}
+.picker label{display:flex;align-items:center;gap:8px;color:var(--ink-soft);font-size:.92rem}
+.picker select{color:var(--ink)}
+.report{display:grid;grid-template-columns:minmax(250px,310px) minmax(0,1fr);margin-top:18px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.margin{padding:24px 22px 28px;border-right:2px solid var(--pen);position:relative}
+.margin::after{content:"";position:absolute;top:0;bottom:0;right:4px;width:1px;background:var(--pen);opacity:.55}
+.margin-title{font-size:.95rem;color:var(--ink-soft);margin:0 0 14px}
+.margin-title+.note{margin-top:0}
+.margin .margin-title:not(:first-child){margin-top:28px}
+.note{margin:0 0 20px}
+.note h3{font-family:var(--hand);font-weight:700;font-size:1.32rem;line-height:1.2;margin:0 0 3px;color:var(--ink)}
+.note.bad h3{color:var(--pen)}
+.note.good h3{color:var(--good)}
+.note p{margin:0;color:var(--ink-soft);font-size:.94rem}
+.todo{list-style:none;padding:0;margin:0}
+.todo li{position:relative;padding-left:26px;margin-bottom:12px;font-size:.96rem}
+.todo li::before{content:"";position:absolute;left:0;top:.28em;width:14px;height:14px;border:2px solid var(--pen);border-radius:2px}
+.main{padding:24px 30px 32px;min-width:0}
+.main section{margin-top:30px}
+.report-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.meta{color:var(--ink-soft)}
+.score-row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px 40px;align-items:center;margin-top:18px}
+.score{display:flex;align-items:center;gap:18px}
+.score p{margin:0;font-weight:700}
+.circled{position:relative;display:inline-block;padding:14px 30px 8px}
+.circled-num{font-family:var(--hand);font-weight:700;font-size:3.3rem;line-height:1;color:var(--pen);font-variant-numeric:tabular-nums}
+.ring{position:absolute;left:-4px;top:-2px;width:calc(100% + 8px);height:calc(100% + 6px);overflow:visible;pointer-events:none}
+.ring path{fill:none;stroke:var(--pen);stroke-width:2.6;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:0}
+@media (prefers-reduced-motion:no-preference){
+  .ring.draw path{animation:draw .75s cubic-bezier(.4,.1,.3,1) .2s both}
+}
+@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.dist h2{margin-bottom:8px}
+.gbar{display:flex;height:18px;border-radius:4px;overflow:hidden;background:var(--bar-track);gap:2px}
+.gbar span{display:block;min-width:4px}
+.g-A{background:var(--gA)}.g-B{background:var(--gB)}.g-C{background:var(--gC)}.g-D{background:var(--gD)}.g-F{background:var(--gF)}
+.glegend{list-style:none;display:flex;flex-wrap:wrap;gap:4px 18px;padding:0;margin:10px 0 4px;font-variant-numeric:tabular-nums}
+.glegend li{display:flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:2px;display:inline-block}
+.bars{display:grid;grid-template-columns:minmax(80px,max-content) minmax(80px,1fr) 3.4rem;gap:9px 14px;align-items:center;margin-top:12px;max-width:760px}
+.bar-label{font-size:.96rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{position:relative;height:14px;background:var(--bar-track);border-radius:3px}
+.bar-fill{position:absolute;left:0;top:0;bottom:0;background:var(--bar);border-radius:3px}
+.bar-fill.low{background:var(--pen)}
+.bar-mark{position:absolute;top:-5px;bottom:-5px;width:2px;margin-left:-1px;background:var(--ink)}
+.bar-val{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.seg{display:inline-flex;border:1px solid var(--rule-strong);border-radius:6px;overflow:hidden}
+.seg button{border:0;background:var(--surface);padding:5px 12px;cursor:pointer;font-size:.92rem}
+.seg button+button{border-left:1px solid var(--rule-strong)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface);font-weight:700}
+td.w-bar{min-width:160px}
+.mini{display:inline-block;vertical-align:middle;width:90px;height:8px;background:var(--bar-track);border-radius:2px;position:relative;margin-right:8px}
+.mini span{position:absolute;left:0;top:0;bottom:0;background:var(--bar);border-radius:2px}
+.mini span.low{background:var(--pen)}
+.lost{color:var(--pen);font-weight:700}
+.chart-wrap{overflow-x:auto;margin-top:10px}
+.chart{display:block;width:100%;min-width:520px;height:auto}
+.chart .gl{stroke:var(--rule);stroke-width:1}
+.chart .ax{fill:var(--ink-soft);font-size:12px}
+.chart .xl{fill:var(--ink);font-size:13px;font-weight:700}
+.chart .vl{fill:var(--ink);font-size:13px;font-weight:700}
+.chart .tline{fill:none;stroke:var(--bar);stroke-width:2.5;stroke-linejoin:round}
+.chart .pt{fill:var(--bar)}
+.chart .pa{fill:var(--surface);stroke:var(--ink-soft);stroke-width:2;stroke-dasharray:3 2}
+table.trend th.assign,table.trend td.assign{font-style:italic;color:var(--ink-soft)}
+table.trend td.weak{color:var(--pen);font-weight:700;text-decoration:underline wavy var(--pen);text-underline-offset:4px;text-decoration-thickness:1.5px}
+
+footer{border-top:1px solid var(--rule);color:var(--ink-soft);font-size:.9rem;padding:18px 0 28px}
+footer p{margin:0;max-width:80ch}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:8px;max-width:min(92vw,520px);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:50}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:860px){
+  .report{grid-template-columns:1fr}
+  .margin{border-right:0;border-bottom:2px solid var(--pen)}
+  .margin::after{top:auto;left:0;right:0;bottom:4px;width:auto;height:1px}
+  .main{padding:20px 18px 26px}
+  .score-row{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .wrap{padding:0 14px}
+  h1{font-size:1.5rem}
+  .paper-pick{width:100%}
+  .paper-pick select{flex:1}
+  .brand span{display:none}
+  .bars{grid-template-columns:minmax(70px,38%) minmax(60px,1fr) 3rem;gap:8px 10px}
+  .circled-num{font-size:2.7rem}
+}
+@media print{
+  header.top,.banner,.picker,.btn,.seg,footer,.toast{display:none!important}
+  body{background:#fff}
+  .report{border:0}
+  .ring path{animation:none!important}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <div class="brand">
+        <b><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 17.5 11.5 25 28 6" fill="none" stroke="var(--pen)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>BnB Alama</b>
+        <span>Exam marks into teaching decisions</span>
+      </div>
+      <div class="paper-pick">
+        <label for="paperSel">Paper</label>
+        <select id="paperSel"></select>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Sections">
+      <button data-tab="papers">Papers</button>
+      <button data-tab="questions">Questions</button>
+      <button data-tab="marks">Marks</button>
+      <button data-tab="class">Class report</button>
+      <button data-tab="student">Student report</button>
+      <button data-tab="trends">Trends</button>
+    </nav>
+  </div>
+</header>
+<div class="banner" id="banner" hidden>
+  <div class="wrap">
+    <p>This is a sample Form 3A Physics class with four papers. Look around the reports, then clear it and enter your own paper.</p>
+    <button class="btn primary small" id="clearSample">Clear sample and start</button>
+    <button class="btn ghost small" id="hideBanner">Hide</button>
+  </div>
+</div>
+<main id="view" class="wrap"></main>
+<footer>
+  <div class="wrap">
+    <p id="footNote">Marks are saved in this browser on this device only. Nothing is uploaded. Use student numbers instead of names, and export a backup from Papers to move your data.</p>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+
+/*LOGIC-START*/
+const SKILLS=[
+  {id:'recall',name:'Recall',hint:'State, define, name, list',act:'definitions and laws'},
+  {id:'numerical',name:'Numerical',hint:'Calculate and solve problems',act:'calculations'},
+  {id:'explanation',name:'Explanation',hint:'Explain why or how something happens',act:'explain-why answers'},
+  {id:'diagram',name:'Diagram',hint:'Draw, label, or read a diagram or graph',act:'diagram questions'},
+  {id:'practical',name:'Practical',hint:'Experiments, readings, procedures',act:'practical questions'}
+];
+const SKILL=Object.fromEntries(SKILLS.map(s=>[s.id,s]));
+const skillIdx=id=>{const i=SKILLS.findIndex(s=>s.id===id);return i<0?99:i;};
+const TYPES=[{id:'test',name:'Test'},{id:'midterm',name:'Mid-term'},{id:'terminal',name:'Terminal'},{id:'mock',name:'Mock'},{id:'assignment',name:'Assignment'}];
+const TYPE=Object.fromEntries(TYPES.map(t=>[t.id,t]));
+const GRADES=[['A',75],['B',65],['C',45],['D',30],['F',0]];
+const TOPICS=['Applications of vectors','Friction','Light','Optical instruments','Thermal expansion','Transfer of thermal energy','Measurement of thermal energy','Vapour','Current electricity'];
+
+const isNum=v=>typeof v==='number'&&isFinite(v);
+const r0=x=>Math.round(x);
+const clampPct=v=>Math.max(0,Math.min(100,v));
+const fmtNum=(v,dp=1)=>Number.isInteger(v)?String(v):(Math.round(v*Math.pow(10,dp))/Math.pow(10,dp)).toString();
+const numCmp=(a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true});
+const byDate=(a,b)=>(a.date||'').localeCompare(b.date||'');
+function gradeOf(p){for(const [g,m] of GRADES){if(p>=m)return g;}return 'F';}
+function joinAnd(arr){return arr.length<=1?arr.join(''):arr.slice(0,-1).join(', ')+' and '+arr[arr.length-1];}
+function qList(qs){return joinAnd(qs.map(q=>'Q'+q.no));}
+function plural(n,one,many){return n===1?one:(many||one+'s');}
+function marksOf(p,sid){return p.marks[sid]||(p.marks[sid]={});}
+
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+
+function makeSample(){
+  const rnd=mulberry32(4172026);
+  const gauss=()=>{let u=0,v=0;while(!u)u=rnd();while(!v)v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const N=40, cls='Form 3A', subject='Physics';
+  const students=[];
+  for(let i=1;i<=N;i++)students.push({id:'s'+i,label:'F3A-'+String(i).padStart(2,'0')});
+  const ability={},bias={};
+  students.forEach(s=>{ability[s.id]=Math.min(.95,Math.max(.14,.6+gauss()*.17));bias[s.id]={};SKILLS.forEach(k=>bias[s.id][k.id]=gauss()*.08);});
+  const skillMod={recall:.13,numerical:-.2,explanation:-.02,diagram:.05,practical:-.05};
+  const topicMod={'Current electricity':-.13,'Light':-.04,'Optical instruments':-.02,'Thermal expansion':.05,'Friction':.05,'Applications of vectors':-.02,'Transfer of thermal energy':.03};
+  const Q=(no,topic,skill,max)=>({id:'q'+no,no:String(no),topic,skill,max});
+  const specs=[
+    {id:'p1',title:'Test 1',type:'test',date:'2026-02-13',mod:.085,qs:[
+      Q(1,'Friction','recall',4),Q(2,'Friction','explanation',6),Q(3,'Friction','numerical',8),Q(4,'Applications of vectors','recall',4),
+      Q(5,'Applications of vectors','diagram',8),Q(6,'Applications of vectors','numerical',10),Q(7,'Friction','practical',5),Q(8,'Applications of vectors','explanation',5)]},
+    {id:'p2',title:'Test 2',type:'test',date:'2026-03-06',mod:.16,qs:[
+      Q(1,'Light','recall',4),Q(2,'Light','diagram',8),Q(3,'Light','numerical',8),Q(4,'Optical instruments','explanation',6),
+      Q(5,'Optical instruments','diagram',8),Q(6,'Optical instruments','numerical',10),Q(7,'Light','practical',6)]},
+    {id:'p3',title:'Assignment 1',type:'assignment',date:'2026-03-20',mod:.22,qs:[
+      Q(1,'Thermal expansion','recall',4),Q(2,'Thermal expansion','explanation',4),Q(3,'Thermal expansion','numerical',4),Q(4,'Thermal expansion','diagram',4),Q(5,'Thermal expansion','practical',4)]},
+    {id:'p4',title:'Mid-term',type:'midterm',date:'2026-04-17',mod:.025,absent:['s17','s33'],qs:[
+      Q(1,'Light','recall',5),Q(2,'Thermal expansion','explanation',8),Q(3,'Light','numerical',10),Q(4,'Optical instruments','diagram',10),
+      Q(5,'Current electricity','recall',6),Q(6,'Transfer of thermal energy','explanation',10),Q(7,'Current electricity','numerical',15),
+      Q(8,'Friction','numerical',10),Q(9,'Current electricity','diagram',12),Q(10,'Thermal expansion','practical',14)]}
+  ];
+  const papers=specs.map(sp=>{
+    const marks={};
+    students.forEach(s=>{
+      marks[s.id]={};
+      if(sp.absent&&sp.absent.includes(s.id))return;
+      sp.qs.forEach(q=>{
+        const f=ability[s.id]+skillMod[q.skill]+(topicMod[q.topic]||0)+bias[s.id][q.skill]+sp.mod+gauss()*.16;
+        marks[s.id][q.id]=Math.round(Math.min(1,Math.max(0,f))*q.max);
+      });
+    });
+    return {id:sp.id,title:sp.title,cls,subject,type:sp.type,date:sp.date,questions:sp.qs,students:students.map(s=>({...s})),marks};
+  });
+  return {v:1,sample:true,currentId:'p4',papers};
+}
+
+function analyse(p){
+  const qs=p.questions.filter(q=>isNum(q.max)&&q.max>0);
+  const totalMax=qs.reduce((a,q)=>a+q.max,0);
+  const over=[],rows=[];
+  for(const s of p.students){
+    const m=p.marks[s.id]||{};
+    if(!qs.some(q=>isNum(m[q.id])))continue;
+    let earned=0;const bySkill={},byTopic={},byQ={};
+    for(const q of qs){
+      let v=isNum(m[q.id])?m[q.id]:0;
+      if(v>q.max){over.push({student:s.label,q:q.no});v=q.max;}
+      if(v<0)v=0;
+      earned+=v;byQ[q.id]=v;
+      (bySkill[q.skill]||(bySkill[q.skill]={e:0,m:0}));bySkill[q.skill].e+=v;bySkill[q.skill].m+=q.max;
+      const t=q.topic||'No topic';
+      (byTopic[t]||(byTopic[t]={e:0,m:0}));byTopic[t].e+=v;byTopic[t].m+=q.max;
+    }
+    const pct=totalMax?earned/totalMax*100:0;
+    rows.push({s,earned,pct,grade:gradeOf(pct),bySkill,byTopic,byQ});
+  }
+  const n=rows.length;
+  const ranked=[...rows].sort((a,b)=>b.earned-a.earned);
+  ranked.forEach((r,i)=>{r.pos=(i>0&&ranked[i-1].earned===r.earned)?ranked[i-1].pos:i+1;});
+  const mean=n?rows.reduce((a,r)=>a+r.pct,0)/n:0;
+  const sortedP=rows.map(r=>r.pct).sort((a,b)=>a-b);
+  const median=n?(n%2?sortedP[(n-1)/2]:(sortedP[n/2-1]+sortedP[n/2])/2):0;
+  const gradeCounts={A:0,B:0,C:0,D:0,F:0};rows.forEach(r=>gradeCounts[r.grade]++);
+  const questions=qs.map(q=>{let e=0,below=0;rows.forEach(r=>{e+=r.byQ[q.id];if(r.byQ[q.id]<q.max/2)below++;});return {q,avg:n?e/n:0,pct:n?e/(q.max*n)*100:0,below};});
+  const agg=keyFn=>{
+    const map=new Map();
+    qs.forEach(q=>{const k=keyFn(q);if(!map.has(k))map.set(k,{key:k,qs:[],max:0});const g=map.get(k);g.qs.push(q);g.max+=q.max;});
+    return [...map.values()].map(g=>{let e=0,below=0;rows.forEach(r=>{const se=g.qs.reduce((a,q)=>a+r.byQ[q.id],0);e+=se;if(se<g.max/2)below++;});return {...g,pct:n?e/(g.max*n)*100:0,below};});
+  };
+  const skills=agg(q=>q.skill).map(g=>({...g,name:(SKILL[g.key]||{}).name||g.key})).sort((a,b)=>skillIdx(a.key)-skillIdx(b.key));
+  const topics=agg(q=>q.topic||'No topic');
+  const cells=agg(q=>(q.topic||'No topic')+'\u0001'+q.skill).map(g=>{const [topic,skill]=g.key.split('\u0001');return {...g,topic,skill,name:(SKILL[skill]||{}).name||skill};});
+  return {p,qs,totalMax,rows,n,mean,median,gradeCounts,questions,skills,topics,cells,over,absent:p.students.length-n};
+}
+
+function classNotes(a){
+  const notes=[],actions=[];
+  if(!a.n)return {notes,actions};
+  const g=a.gradeCounts;
+  const sk=a.skills.filter(s=>s.max>0).sort((x,y)=>x.pct-y.pct);
+  let weakSkill=null;
+  if(sk.length>=2){
+    const w=sk[0],s=sk[sk.length-1],gap=s.pct-w.pct;
+    if(gap>=10){
+      weakSkill=w;
+      notes.push({tone:'bad',head:`${w.name} questions: ${r0(w.pct)}%`,body:`The weakest skill on this paper, ${r0(gap)} points behind ${s.name.toLowerCase()} (${r0(s.pct)}%). ${w.below} of ${a.n} students earned less than half of these marks.`});
+    }else{
+      notes.push({tone:'info',head:'Skills are close',body:'Every skill is within 10 points of the others, so the topic breakdown tells you more on this paper.'});
+    }
+  }
+  const cell=a.cells.filter(c=>c.max>=5&&c.pct<=a.mean-8).sort((x,y)=>x.pct-y.pct)[0];
+  if(cell){
+    notes.push({tone:'bad',head:`${cell.topic} (${cell.name.toLowerCase()}): ${r0(cell.pct)}%`,body:`On ${qList(cell.qs)}, ${cell.below} of ${a.n} students earned less than half the marks.`});
+  }
+  const worst=[...a.questions].sort((x,y)=>x.pct-y.pct)[0];
+  const worstInCell=cell&&cell.qs.length===1&&cell.qs[0].id===worst.q.id;
+  if(worst&&worst.below/a.n>=.5&&!worstInCell){
+    notes.push({tone:'bad',head:`Q${worst.q.no}: ${r0(worst.pct)}%`,body:`${worst.below} of ${a.n} students earned less than half of the ${fmtNum(worst.q.max)} marks. ${worst.q.topic||'No topic'}, ${(SKILL[worst.q.skill]||{name:''}).name.toLowerCase()}.`});
+  }
+  const tp=a.topics.filter(t=>t.max>0).sort((x,y)=>y.pct-x.pct);
+  if(tp.length>=2&&tp[0].pct>=a.mean+5){
+    notes.push({tone:'good',head:`${tp[0].key}: ${r0(tp[0].pct)}%`,body:'The strongest topic on this paper. It needs revision, not reteaching.'});
+  }
+  if(a.n<10)notes.push({tone:'info',head:'Small group',body:`With ${a.n} ${plural(a.n,'student')}, one script moves these percentages a lot. Treat them as hints.`});
+
+  if(cell)actions.push(`Reteach ${SKILL[cell.skill]?SKILL[cell.skill].act:'these questions'} in ${cell.topic}, working through ${qList(cell.qs)} on the board.`);
+  if(weakSkill){
+    const act=SKILL[weakSkill.key]?SKILL[weakSkill.key].act:'these questions';
+    const others=a.cells.filter(c=>c.skill===weakSkill.key&&(!cell||c.key!==cell.key)&&c.pct<a.mean).map(c=>c.topic);
+    if(cell&&cell.skill===weakSkill.key&&others.length)actions.push(`Set short practice on ${act} in ${joinAnd(others)} too. The gap isn't limited to one topic.`);
+    else if(!cell||cell.skill!==weakSkill.key)actions.push(`Set a short practice task on ${act}${others.length?` in ${joinAnd(others)}`:''} before the next test.`);
+  }
+  if(g.F>0&&g.F/a.n>=.15)actions.push(`Meet the ${g.F} ${plural(g.F,'student')} below 30% as a group. Student report shows each one's weakest area.`);
+  if(a.over.length)actions.push(`Fix ${a.over.length} ${plural(a.over.length,'mark')} above the question maximum in Marks. They count as full marks for now.`);
+  if(!actions.length)actions.push('No area is far behind the rest. Continue the scheme of work and check again after the next test.');
+  return {notes,actions};
+}
+
+function studentNotes(a,row){
+  const notes=[],actions=[];
+  const sk=a.skills.filter(s=>s.max>0).map(s=>{const b=row.bySkill[s.key];return {...s,spct:b.e/b.m*100};}).sort((x,y)=>x.spct-y.spct);
+  let weak=null;
+  if(sk.length>=2){
+    const w=sk[0],st=sk[sk.length-1];
+    const behind=w.spct<w.pct-5;
+    if(behind)weak=w;
+    notes.push({tone:behind?'bad':'info',head:`${w.name}: ${r0(w.spct)}%`,body:`Weakest skill. The class scored ${r0(w.pct)}% on ${w.name.toLowerCase()} questions.`});
+    if(st.spct-w.spct>=10)notes.push({tone:'good',head:`${st.name}: ${r0(st.spct)}%`,body:`Strongest skill${st.spct>st.pct+5?`, above the class figure of ${r0(st.pct)}%`:''}.`});
+  }
+  const lost=a.qs.map(q=>({q,got:row.byQ[q.id],lost:q.max-row.byQ[q.id]})).filter(x=>x.got<x.q.max/2).sort((x,y)=>y.lost-x.lost).slice(0,3);
+  if(lost.length){
+    notes.push({tone:'bad',head:'Most marks lost',body:lost.map(x=>`Q${x.q.no} (${fmtNum(x.got)} of ${fmtNum(x.q.max)})`).join(', ')+'.'});
+    const top=lost[0].q;
+    actions.push(`Redo Q${top.no} with corrections, then practise more ${SKILL[top.skill]?SKILL[top.skill].act:'questions'} from ${top.topic||'that topic'}.`);
+  }
+  if(weak&&(!lost.length||lost[0].q.skill!==weak.key))actions.push(`Practise ${SKILL[weak.key]?SKILL[weak.key].act:'these questions'} across topics, starting with the ones on this paper.`);
+  if(!lost.length)actions.push('At least half marks on every question. Aim for full marks on the longest questions next.');
+  return {notes,actions};
+}
+
+function trendData(papers,label){
+  return papers.map(p=>{
+    const a=analyse(p);let val=null;const skills={};
+    if(label){
+      const row=a.rows.find(r=>r.s.label===label);
+      if(row){val=row.pct;a.skills.forEach(s=>{const b=row.bySkill[s.key];skills[s.key]=b.e/b.m*100;});}
+    }else if(a.n){val=a.mean;a.skills.forEach(s=>{skills[s.key]=s.pct;});}
+    return {p,val,skills,isAssign:p.type==='assignment'};
+  });
+}
+
+function weakestSkill(skills){
+  const e=Object.entries(skills);
+  if(e.length<2)return null;
+  return e.sort((x,y)=>x[1]-y[1])[0][0];
+}
+
+function trendNotes(data){
+  const notes=[],actions=[];
+  const tests=data.filter(d=>!d.isAssign&&d.val!=null);
+  if(tests.length>=2){
+    const last=tests[tests.length-1],prev=tests[tests.length-2],diff=last.val-prev.val;
+    const tone=diff<=-3?'bad':diff>=3?'good':'info';
+    const head=diff<=-3?`Down ${r0(-diff)} points`:diff>=3?`Up ${r0(diff)} points`:'Holding steady';
+    notes.push({tone,head,body:`From ${prev.p.title} to ${last.p.title}. Tests and exams so far: ${joinAnd(tests.map(t=>r0(t.val)+'%'))}.`});
+    if(diff<=-3)actions.push(`Open the Class report for ${last.p.title} to see which topics and skills pulled the score down.`);
+  }else{
+    notes.push({tone:'info',head:'Not enough tests yet',body:'Add at least two tests or exams for this class to see a trend.'});
+  }
+  const assigns=data.filter(d=>d.isAssign&&d.val!=null);
+  if(assigns.length){
+    notes.push({tone:'info',head:'Assignments kept apart',body:`${joinAnd(assigns.map(d=>`${d.p.title} ${r0(d.val)}%`))}. Take-home work isn't comparable with timed papers, so it stays off the trend line.`});
+  }
+  if(tests.length>=2){
+    const weakest=tests.map(t=>weakestSkill(t.skills)).filter(Boolean);
+    const counts={};weakest.forEach(k=>counts[k]=(counts[k]||0)+1);
+    const top=Object.entries(counts).sort((x,y)=>y[1]-x[1])[0];
+    if(top&&top[1]>=2&&top[1]===tests.length){
+      const k=top[0];
+      notes.push({tone:'bad',head:`${SKILL[k].name}: weakest every time`,body:`Lowest skill on all ${tests.length} tests and exams: ${joinAnd(tests.map(t=>r0(t.skills[k])+'%'))}.`});
+      actions.push(`Plan regular practice on ${SKILL[k].act} across the term. This is a pattern, not one bad paper.`);
+    }else if(top&&top[1]>=2&&top[1]/tests.length>=.6){
+      const k=top[0];
+      notes.push({tone:'bad',head:`${SKILL[k].name}: weakest on ${top[1]} of ${tests.length}`,body:`The weakest skill on most tests and exams for this ${data.length?'group':'class'}.`});
+      actions.push(`Build a few ${SKILL[k].act} into each week's homework.`);
+    }
+  }
+  return {notes,actions};
+}
+/*LOGIC-END*/
+
+/* ---------- storage ---------- */
+const KEY='alama.v1';
+const $=(s,r)=>(r||document).querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4);
+let storageOk=true;
+
+function normalizePaper(p){
+  if(!p||typeof p!=='object'||!Array.isArray(p.questions)||!Array.isArray(p.students))return null;
+  return {
+    id:String(p.id||uid()),title:String(p.title||'Untitled paper'),cls:String(p.cls||''),subject:String(p.subject||''),
+    type:TYPE[p.type]?p.type:'test',date:String(p.date||''),
+    questions:p.questions.map(q=>({id:String(q.id||uid()),no:String(q.no==null?'':q.no),topic:String(q.topic||''),skill:SKILL[q.skill]?q.skill:'recall',max:Number(q.max)||0})),
+    students:p.students.map(s=>({id:String(s.id||uid()),label:String(s.label||'')})),
+    marks:(p.marks&&typeof p.marks==='object')?p.marks:{}
+  };
+}
+function load(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(raw){const s=JSON.parse(raw);if(s&&Array.isArray(s.papers)){s.papers=s.papers.map(normalizePaper).filter(Boolean);return s;}}
+  }catch(e){storageOk=false;}
+  return makeSample();
+}
+let saveTimer=null;
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{
+    try{localStorage.setItem(KEY,JSON.stringify(state));}
+    catch(e){if(storageOk){storageOk=false;noteStorage();}}
+  },250);
+}
+function noteStorage(){
+  $('#footNote').textContent="This browser isn't keeping your changes. Export a backup from Papers before you close the page.";
+  toast("This browser isn't keeping changes. Export a backup before you close the page.");
+}
+
+let state=load();
+if(!state.papers.find(p=>p.id===state.currentId))state.currentId=state.papers[0]?state.papers[0].id:null;
+const ui={tab:state.papers.length?'class':'papers',studentId:{},qSort:'order',trendClass:null,trendStudent:'',hideBanner:false,drawKey:''};
+const framed=(()=>{try{return window.self!==window.top;}catch(e){return true;}})();
+
+function cur(){return state.papers.find(p=>p.id===state.currentId)||null;}
+function groupBy(arr,fn){const m=new Map();arr.forEach(x=>{const k=fn(x);if(!m.has(k))m.set(k,[]);m.get(k).push(x);});return m;}
+function fmtDate(d){if(!d)return '';const dt=new Date(d+'T00:00:00');return isNaN(dt)?d:dt.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function shortDate(d){if(!d)return '';const dt=new Date(d+'T00:00:00');return isNaN(dt)?d:dt.toLocaleDateString('en-GB',{day:'numeric',month:'short'});}
+function slug(s){return String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'paper';}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),3400);}
+
+/* ---------- downloads ---------- */
+let dlPromise=null;
+function getDownloads(){
+  if(!window.claude||typeof window.claude.use!=='function')return Promise.resolve(null);
+  if(!dlPromise)dlPromise=Promise.resolve(window.claude.use('downloads')).catch(()=>null);
+  return dlPromise;
+}
+getDownloads();
+async function saveFile(filename,text,mime){
+  const dl=await getDownloads();
+  if(dl){
+    try{await dl.save({filename,data:text});toast('Saved '+filename+'.');}
+    catch(e){if(e&&e.code!=='declined')toast("That file couldn't be saved here.");}
+    return;
+  }
+  const url=URL.createObjectURL(new Blob([text],{type:mime}));
+  const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),3000);
+}
+
+/* ---------- shared pieces ---------- */
+function metaLine(p){
+  const bits=[[p.cls,p.subject].filter(Boolean).join(' ')];
+  const tn=TYPE[p.type]?TYPE[p.type].name:'';
+  if(tn&&!p.title.toLowerCase().includes(tn.toLowerCase()))bits.push(tn);
+  if(p.date)bits.push(fmtDate(p.date));
+  return bits.filter(Boolean).join(', ');
+}
+function noteHtml(n){return `<div class="note ${n.tone}"><h3>${esc(n.head)}</h3><p>${esc(n.body)}</p></div>`;}
+function marginHtml(notes,actions){
+  return `<aside class="margin" aria-label="Findings">
+    <h2 class="margin-title">What the marks say</h2>
+    ${notes.map(noteHtml).join('')}
+    ${actions.length?`<h2 class="margin-title">What to do next</h2><ul class="todo">${actions.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
+  </aside>`;
+}
+function circled(text,draw){
+  return `<span class="circled"><span class="circled-num">${esc(text)}</span><svg class="ring${draw?' draw':''}" viewBox="0 0 160 76" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M28 12C60 1 132 2 150 26c15 20-18 44-72 46C28 74 4 58 7 38 9 22 34 9 70 6"/></svg></span>`;
+}
+function drawFor(key){const d=ui.drawKey!==key;ui.drawKey=key;return d;}
+function bars(items,ref){
+  return `<div class="bars">${items.map(it=>{
+    const mark=it.ref!=null?it.ref:ref;
+    return `<div class="bar-label" title="${esc(it.label)}">${esc(it.label)}</div>
+      <div class="bar-track"><span class="bar-fill${it.low?' low':''}" style="width:${clampPct(it.pct)}%"></span>${mark!=null?`<span class="bar-mark" style="left:${clampPct(mark)}%"></span>`:''}</div>
+      <div class="bar-val">${r0(it.pct)}%${it.ref!=null?`<span class="sr">, class ${r0(it.ref)}%</span>`:''}${it.low?'<span class="sr">, well below average</span>':''}</div>`;
+  }).join('')}</div>`;
+}
+function gradeBar(a){
+  const segs=GRADES.map(([g])=>({g,c:a.gradeCounts[g]}));
+  return `<h2>Grades</h2>
+    <div class="gbar" role="img" aria-label="${segs.map(s=>`${s.g}: ${s.c}`).join(', ')}">${segs.filter(s=>s.c).map(s=>`<span class="g-${s.g}" style="flex:${s.c}"></span>`).join('')}</div>
+    <ul class="glegend">${segs.map(s=>`<li><span class="sw g-${s.g}"></span><b>${s.g}</b>${s.c}</li>`).join('')}</ul>
+    <p class="hint">A 75–100, B 65–74, C 45–64, D 30–44, F below 30</p>`;
+}
+function printBtn(){return framed?'':'<button class="btn" id="printBtn">Print</button>';}
+function needPaper(el){
+  if(cur())return false;
+  el.innerHTML=`<div class="empty"><h1>No papers yet</h1><p>Create a paper, tag its questions, then enter marks. The reports fill in as you type.</p><button class="btn primary" data-go="papers">Create a paper</button></div>`;
+  return true;
+}
+
+/* ---------- header ---------- */
+function renderHeader(){
+  const sel=$('#paperSel');
+  if(state.papers.length){
+    const groups=groupBy(state.papers.slice().sort(byDate),p=>p.cls||'No class');
+    sel.innerHTML=[...groups].map(([c,ps])=>`<optgroup label="${esc(c)}">${ps.map(p=>`<option value="${esc(p.id)}"${p.id===state.currentId?' selected':''}>${esc(p.title||'Untitled paper')}</option>`).join('')}</optgroup>`).join('');
+    sel.disabled=false;
+  }else{sel.innerHTML='<option>No papers yet</option>';sel.disabled=true;}
+  $('#banner').hidden=!(state.sample&&!ui.hideBanner);
+  document.querySelectorAll('nav.tabs button').forEach(b=>{if(b.dataset.tab===ui.tab)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+}
+function render(){
+  renderHeader();
+  const el=$('#view');
+  ({papers:renderPapers,questions:renderQuestions,marks:renderMarks,class:renderClass,student:renderStudent,trends:renderTrends})[ui.tab](el);
+}
+
+/* ---------- papers ---------- */
+function renderPapers(el){
+  const papers=state.papers.slice().sort(byDate);
+  const classes=[...new Set(state.papers.map(p=>p.cls).filter(Boolean))];
+  const groups=groupBy(papers,p=>p.cls||'No class');
+  const c=cur();
+  const today=new Date().toISOString().slice(0,10);
+  el.innerHTML=`
+  <section class="block">
+    <h1>Papers</h1>
+    ${papers.length?[...groups].map(([cls,ps])=>`
+      <h2 class="group">${esc(cls)}</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Paper</th><th>Type</th><th>Date</th><th class="num">Questions</th><th class="num">Students</th><th class="num">Average</th><th><span class="sr">Actions</span></th></tr></thead>
+        <tbody>${ps.map(p=>{const a=analyse(p);return `<tr${p.id===state.currentId?' class="current"':''}>
+          <td><button class="link" data-open="${esc(p.id)}">${esc(p.title||'Untitled paper')}</button></td>
+          <td>${esc(TYPE[p.type]?TYPE[p.type].name:'')}</td><td>${esc(fmtDate(p.date))}</td>
+          <td class="num">${p.questions.length}</td><td class="num">${a.n}</td><td class="num">${a.n?r0(a.mean)+'%':'–'}</td>
+          <td class="row-actions"><button class="btn small" data-dup="${esc(p.id)}">Duplicate</button> <button class="btn small danger" data-del="${esc(p.id)}">Delete</button></td>
+        </tr>`;}).join('')}</tbody>
+      </table></div>`).join(''):`<p class="lead">No papers yet. Start with the last paper you marked.</p>`}
+  </section>
+  <section class="block">
+    <h2>New paper</h2>
+    <div class="fields">
+      <label>Title<input type="text" id="npTitle" placeholder="Terminal exam"></label>
+      <label>Class<input type="text" id="npClass" list="classList" value="${esc(c?c.cls:'')}" placeholder="Form 3A"></label>
+      <label>Subject<input type="text" id="npSubject" value="${esc(c?c.subject:'Physics')}"></label>
+      <label>Type<select id="npType">${TYPES.map(t=>`<option value="${t.id}">${t.name}</option>`).join('')}</select></label>
+      <label>Date<input type="date" id="npDate" value="${today}"></label>
+      <label>Students<select id="npCopy"><option value="">Start with none</option>${papers.map(p=>`<option value="${esc(p.id)}">Copy from ${esc(p.cls?p.cls+': ':'')}${esc(p.title)}</option>`).join('')}</select></label>
+    </div>
+    <datalist id="classList">${classes.map(x=>`<option value="${esc(x)}">`).join('')}</datalist>
+    <div class="btn-row"><button class="btn primary" id="npCreate">Create paper</button></div>
+  </section>
+  <section class="block">
+    <h2>Your data</h2>
+    <p class="hint">Marks are saved in this browser on this device only. Nothing is uploaded anywhere. Use student numbers rather than names. Export a backup to keep a copy or move your data to another device.</p>
+    <div class="btn-row">
+      <button class="btn" id="exportBtn">Export backup</button>
+      <button class="btn" id="importBtn">Import backup</button>
+      <input type="file" id="importFile" accept=".json,application/json" class="sr" tabindex="-1" aria-hidden="true">
+      <button class="btn danger" id="wipeBtn">Delete all data</button>
+    </div>
+  </section>`;
+}
+
+/* ---------- questions ---------- */
+function renderQuestions(el){
+  if(needPaper(el))return;
+  const p=cur();
+  const topics=[...new Set([...TOPICS,...state.papers.flatMap(x=>x.questions.map(q=>q.topic)).filter(Boolean)])];
+  el.innerHTML=`
+  <section class="block">
+    <h1>Questions</h1>
+    <div class="fields">
+      <label>Title<input type="text" data-pf="title" value="${esc(p.title)}"></label>
+      <label>Class<input type="text" data-pf="cls" value="${esc(p.cls)}"></label>
+      <label>Subject<input type="text" data-pf="subject" value="${esc(p.subject)}"></label>
+      <label>Type<select data-pf="type">${TYPES.map(t=>`<option value="${t.id}"${t.id===p.type?' selected':''}>${t.name}</option>`).join('')}</select></label>
+      <label>Date<input type="date" data-pf="date" value="${esc(p.date)}"></label>
+    </div>
+  </section>
+  <section class="block">
+    <h2>Questions <span class="muted" id="qTotal"></span></h2>
+    <p class="hint">Tag every question with its topic and the skill it tests. If a question has parts that test different skills, give each part its own row, such as 3a and 3b.</p>
+    ${p.questions.length?`<div class="table-wrap"><table class="qtable">
+      <thead><tr><th>No.</th><th>Topic</th><th>Skill</th><th class="num">Max marks</th><th><span class="sr">Remove</span></th></tr></thead>
+      <tbody>${p.questions.map((q,i)=>`<tr>
+        <td><input type="text" class="w-no" data-qf="no" data-i="${i}" value="${esc(q.no)}" aria-label="Question number, row ${i+1}"></td>
+        <td><input type="text" class="w-topic" list="topicList" data-qf="topic" data-i="${i}" value="${esc(q.topic)}" aria-label="Topic, question ${esc(q.no)}"></td>
+        <td><select data-qf="skill" data-i="${i}" aria-label="Skill, question ${esc(q.no)}">${SKILLS.map(s=>`<option value="${s.id}"${s.id===q.skill?' selected':''}>${s.name}</option>`).join('')}</select></td>
+        <td class="num"><input type="text" inputmode="decimal" class="w-max" data-qf="max" data-i="${i}" value="${esc(q.max)}" aria-label="Maximum marks, question ${esc(q.no)}"></td>
+        <td class="row-actions"><button class="btn small ghost" data-qdel="${i}" aria-label="Remove question ${esc(q.no)}">Remove</button></td>
+      </tr>`).join('')}</tbody>
+    </table></div>`:'<p class="lead">No questions yet. Add one row for each question or question part.</p>'}
+    <datalist id="topicList">${topics.map(t=>`<option value="${esc(t)}">`).join('')}</datalist>
+    <div class="btn-row">
+      <button class="btn primary" id="addQ">Add question</button>
+      <button class="btn" id="addQ5">Add 5 questions</button>
+      ${p.questions.length?'<button class="btn" data-go="marks">Enter marks</button>':''}
+    </div>
+  </section>
+  <section class="block">
+    <h2>Skill tags</h2>
+    <dl class="skills">${SKILLS.map(s=>`<div><dt>${s.name}</dt><dd>${s.hint}</dd></div>`).join('')}</dl>
+  </section>`;
+  updateQTotal();
+}
+function updateQTotal(){
+  const p=cur(),t=$('#qTotal');if(!p||!t)return;
+  const total=p.questions.reduce((a,q)=>a+(isNum(q.max)?q.max:0),0);
+  t.textContent=p.questions.length?`${p.questions.length} ${plural(p.questions.length,'question')}, ${fmtNum(total)} marks`:'';
+}
+function addQuestions(p,count){
+  for(let i=0;i<count;i++){
+    const last=p.questions[p.questions.length-1];
+    const n=last?(parseInt(last.no,10)||p.questions.length)+1:1;
+    p.questions.push({id:uid(),no:String(n),topic:last?last.topic:'',skill:last?last.skill:'recall',max:last?last.max:5});
+  }
+}
+
+/* ---------- marks ---------- */
+function renderMarks(el){
+  if(needPaper(el))return;
+  const p=cur();
+  if(!p.questions.length){
+    el.innerHTML=`<div class="empty"><h1>Add questions first</h1><p>Marks go in question by question, so this paper needs its questions and their maximum marks.</p><button class="btn primary" data-go="questions">Add questions</button></div>`;
+    return;
+  }
+  const total=p.questions.reduce((a,q)=>a+(isNum(q.max)?q.max:0),0);
+  el.innerHTML=`
+  <section class="block">
+    <div class="split"><h1>Marks</h1>${p.students.length?'<button class="btn" id="csvBtn">Download results (CSV)</button>':''}</div>
+    <p class="hint">Type a mark and press Enter to move down. Paste a block of marks straight from a spreadsheet. Blank cells count as 0, and a student with no marks at all counts as absent.</p>
+    <div class="add-row">
+      <label>Students to add<input type="text" inputmode="numeric" id="addN" class="w-no" value="${p.students.length?5:40}"></label>
+      <button class="btn primary" id="addS">Add students</button>
+    </div>
+    ${p.students.length?gridHtml(p,total):'<p class="lead">No students yet. Add them above. You can type over the numbers with your own student numbers.</p>'}
+    <p id="gridMsg" aria-live="polite"></p>
+  </section>`;
+}
+function gridHtml(p,total){
+  return `<div class="grid-wrap"><table class="grid">
+    <thead><tr><th class="stu" scope="col">Student</th>${p.questions.map(q=>`<th scope="col" title="${esc(q.topic)}, ${esc(SKILL[q.skill]?SKILL[q.skill].name:'')}"><span class="qno">Q${esc(q.no)}</span><span class="qmax">/${fmtNum(q.max)}</span></th>`).join('')}<th scope="col" class="tot">Total /${fmtNum(total)}</th><th scope="col"><span class="sr">Remove</span></th></tr></thead>
+    <tbody>${p.students.map((s,r)=>{const m=marksOf(p,s.id);return `<tr>
+      <th class="stu" scope="row"><input class="label" data-r="${r}" data-c="0" value="${esc(s.label)}" aria-label="Student number, row ${r+1}"></th>
+      ${p.questions.map((q,c)=>{const v=m[q.id];const bad=isNum(v)&&(v>q.max||v<0);return `<td><input data-r="${r}" data-c="${c+1}" inputmode="decimal" autocomplete="off" value="${isNum(v)?v:''}"${bad?' aria-invalid="true"':''} aria-label="${esc(s.label)}, Q${esc(q.no)}, out of ${fmtNum(q.max)}"></td>`;}).join('')}
+      <td class="tot" id="tot-${r}">${rowTotal(p,s)}</td>
+      <td><button class="btn small ghost" data-sdel="${r}" aria-label="Remove ${esc(s.label)}">Remove</button></td>
+    </tr>`;}).join('')}</tbody>
+  </table></div>`;
+}
+function rowTotal(p,s){
+  const m=marksOf(p,s.id);
+  if(!p.questions.some(q=>isNum(m[q.id])))return '<span class="muted">Absent</span>';
+  let t=0,max=0;
+  p.questions.forEach(q=>{if(!isNum(q.max)||q.max<=0)return;max+=q.max;t+=Math.min(Math.max(isNum(m[q.id])?m[q.id]:0,0),q.max);});
+  return `${fmtNum(t)} <span class="muted">${max?r0(t/max*100):0}%</span>`;
+}
+function addStudents(p,count){
+  const last=p.students[p.students.length-1];
+  let prefix='S',num=0,pad=2;
+  if(last){
+    const m=/^(.*?)(\d+)$/.exec(last.label.trim());
+    if(m){prefix=m[1];num=parseInt(m[2],10);pad=m[2].length;}
+    else{prefix=(last.label.trim()||'S')+'-';}
+  }
+  for(let i=0;i<count;i++){num++;const s={id:uid(),label:prefix+String(num).padStart(pad,'0')};p.students.push(s);p.marks[s.id]={};}
+}
+function parseMark(raw){
+  const t=String(raw).trim().replace(',','.');
+  if(t==='')return {empty:true};
+  const n=Number(t);
+  return isFinite(n)?{value:n}:{invalid:true};
+}
+function onGridInput(t){
+  const p=cur();const r=+t.dataset.r,c=+t.dataset.c;const s=p.students[r];if(!s)return;
+  if(c===0){s.label=t.value;save();return;}
+  const q=p.questions[c-1];if(!q)return;
+  const m=marksOf(p,s.id);const res=parseMark(t.value);let msg='';
+  if(res.empty){delete m[q.id];}
+  else if(res.invalid){delete m[q.id];msg=`Q${q.no} needs a number.`;}
+  else{m[q.id]=res.value;if(res.value>q.max||res.value<0)msg=`Q${q.no} allows 0 to ${fmtNum(q.max)} marks.`;}
+  if(msg)t.setAttribute('aria-invalid','true');else t.removeAttribute('aria-invalid');
+  const g=$('#gridMsg');if(g)g.textContent=msg;
+  const cell=document.getElementById('tot-'+r);if(cell)cell.innerHTML=rowTotal(p,s);
+  save();
+}
+
+/* ---------- class report ---------- */
+function renderClass(el){
+  if(needPaper(el))return;
+  const p=cur();const a=analyse(p);
+  if(!a.qs.length||!a.n){
+    el.innerHTML=`<div class="empty"><h1>No marks yet</h1><p>${a.qs.length?'Enter marks for this paper and the class report builds itself.':'Add this paper’s questions, then enter marks.'}</p><button class="btn primary" data-go="${a.qs.length?'marks':'questions'}">${a.qs.length?'Enter marks':'Add questions'}</button></div>`;
+    return;
+  }
+  const {notes,actions}=classNotes(a);
+  const list=ui.qSort==='hard'?[...a.questions].sort((x,y)=>x.pct-y.pct):a.questions;
+  el.innerHTML=`
+  <article class="report">
+    ${marginHtml(notes,actions)}
+    <div class="main">
+      <header class="report-head">
+        <div><h1>${esc(p.title)}</h1><p class="meta">${esc(metaLine(p))}. ${a.n} ${plural(a.n,'student')}${a.absent?`, ${a.absent} absent`:''}. ${fmtNum(a.totalMax)} marks.</p></div>
+        ${printBtn()}
+      </header>
+      <div class="score-row">
+        <div class="score">${circled(r0(a.mean)+'%',drawFor('class'+p.id))}<p>Class average<br><span class="muted">Median ${r0(a.median)}%</span></p></div>
+        <div class="dist">${gradeBar(a)}</div>
+      </div>
+      <section>
+        <h2>By skill</h2>
+        <p class="hint">Share of the available marks the class earned. The dark line is the class average. Red bars are more than 10 points below it.</p>
+        ${bars(a.skills.map(s=>({label:s.name,pct:s.pct,low:s.pct<a.mean-10})),a.mean)}
+      </section>
+      <section>
+        <h2>By topic</h2>
+        ${bars(a.topics.map(t=>({label:t.key,pct:t.pct,low:t.pct<a.mean-10})),a.mean)}
+      </section>
+      <section>
+        <div class="split"><h2>By question</h2>
+          <div class="seg" role="group" aria-label="Sort questions"><button data-qsort="order" aria-pressed="${ui.qSort==='order'}">Question order</button><button data-qsort="hard" aria-pressed="${ui.qSort==='hard'}">Hardest first</button></div>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Q</th><th>Topic</th><th>Skill</th><th class="num">Average mark</th><th>Earned</th><th class="num">Under half</th></tr></thead>
+          <tbody>${list.map(x=>`<tr>
+            <td><b>${esc(x.q.no)}</b></td><td>${esc(x.q.topic)}</td><td>${esc(SKILL[x.q.skill]?SKILL[x.q.skill].name:'')}</td>
+            <td class="num">${fmtNum(x.avg)} of ${fmtNum(x.q.max)}</td>
+            <td class="w-bar"><span class="mini"><span class="${x.pct<a.mean-10?'low':''}" style="width:${clampPct(x.pct)}%"></span></span>${r0(x.pct)}%</td>
+            <td class="num">${x.below} of ${a.n}</td>
+          </tr>`).join('')}</tbody>
+        </table></div>
+      </section>
+    </div>
+  </article>`;
+}
+
+/* ---------- student report ---------- */
+function renderStudent(el){
+  if(needPaper(el))return;
+  const p=cur();const a=analyse(p);
+  if(!a.qs.length||!a.n){
+    el.innerHTML=`<div class="empty"><h1>No marks yet</h1><p>Each student gets a report once their marks are in.</p><button class="btn primary" data-go="${a.qs.length?'marks':'questions'}">${a.qs.length?'Enter marks':'Add questions'}</button></div>`;
+    return;
+  }
+  const rows=[...a.rows].sort((x,y)=>numCmp(x.s.label,y.s.label));
+  const row=rows.find(r=>r.s.id===ui.studentId[p.id])||rows[0];
+  ui.studentId[p.id]=row.s.id;
+  const idx=rows.indexOf(row);
+  const {notes,actions}=studentNotes(a,row);
+  const diff=row.pct-a.mean;
+  const cmp=Math.abs(diff)<.5?'Level with the class average.':diff>0?`${r0(diff)} points above the class average of ${r0(a.mean)}%.`:`${r0(-diff)} points below the class average of ${r0(a.mean)}%.`;
+  el.innerHTML=`
+  <div class="picker">
+    <label>Student <select id="stuSel">${rows.map(r=>`<option value="${esc(r.s.id)}"${r===row?' selected':''}>${esc(r.s.label)}</option>`).join('')}</select></label>
+    <button class="btn" data-step="-1"${idx===0?' disabled':''}>Previous</button>
+    <button class="btn" data-step="1"${idx===rows.length-1?' disabled':''}>Next</button>
+    ${a.absent?`<span class="muted">${a.absent} absent ${plural(a.absent,'student is','students are')} not listed.</span>`:''}
+  </div>
+  <article class="report">
+    ${marginHtml(notes,actions)}
+    <div class="main">
+      <header class="report-head">
+        <div><h1>${esc(row.s.label)}</h1><p class="meta">${esc(p.title)}. ${esc(metaLine(p))}.</p></div>
+        ${printBtn()}
+      </header>
+      <div class="score-row">
+        <div class="score">${circled(r0(row.pct)+'%',drawFor('stu'+p.id+row.s.id))}<p>${fmtNum(row.earned)} of ${fmtNum(a.totalMax)} marks<br><span class="muted">Grade ${row.grade}. Position ${row.pos} of ${a.n}.</span></p></div>
+        <div class="dist"><h2>Against the class</h2><p>${esc(cmp)}</p></div>
+      </div>
+      <section>
+        <h2>By skill</h2>
+        <p class="hint">The dark line on each bar is the class figure for that skill. Red bars are more than 10 points below it.</p>
+        ${bars(a.skills.map(s=>{const b=row.bySkill[s.key];const pct=b.e/b.m*100;return {label:s.name,pct,ref:s.pct,low:pct<s.pct-10};}))}
+      </section>
+      <section>
+        <h2>By topic</h2>
+        ${bars(a.topics.map(t=>{const b=row.byTopic[t.key];const pct=b.e/b.m*100;return {label:t.key,pct,ref:t.pct,low:pct<t.pct-10};}))}
+      </section>
+      <section>
+        <h2>By question</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Q</th><th>Topic</th><th>Skill</th><th class="num">Marks</th><th class="num">Class average</th></tr></thead>
+          <tbody>${a.questions.map(x=>{const got=row.byQ[x.q.id];return `<tr>
+            <td><b>${esc(x.q.no)}</b></td><td>${esc(x.q.topic)}</td><td>${esc(SKILL[x.q.skill]?SKILL[x.q.skill].name:'')}</td>
+            <td class="num${got<x.q.max/2?' lost':''}">${fmtNum(got)} of ${fmtNum(x.q.max)}</td>
+            <td class="num">${fmtNum(x.avg)}</td>
+          </tr>`;}).join('')}</tbody>
+        </table></div>
+      </section>
+    </div>
+  </article>`;
+}
+
+/* ---------- trends ---------- */
+function lineChart(data){
+  const W=640,H=250,L=46,R=24,T=26,B=52,n=data.length;
+  const P=44;const x=i=>n===1?(L+W-R)/2:L+P+i*(W-L-R-2*P)/(n-1);
+  const y=v=>T+(100-v)*(H-T-B)/100;
+  const maxChars=Math.max(6,Math.floor((n>1?(W-L-R-2*P)/(n-1):W)/7.5));
+  const trunc=s=>s.length>maxChars?s.slice(0,maxChars-1)+'…':s;
+  let s='';
+  [0,25,50,75,100].forEach(v=>{s+=`<line class="gl" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"/><text class="ax" x="${L-8}" y="${y(v)+4}" text-anchor="end">${v}%</text>`;});
+  const tp=data.map((d,i)=>({d,i})).filter(o=>!o.d.isAssign&&o.d.val!=null);
+  if(tp.length>1)s+=`<polyline class="tline" points="${tp.map(o=>x(o.i).toFixed(1)+','+y(o.d.val).toFixed(1)).join(' ')}"/>`;
+  data.forEach((d,i)=>{
+    const cx=x(i);
+    s+=`<text class="xl" x="${cx}" y="${H-B+22}" text-anchor="middle">${esc(trunc(d.p.title))}</text><text class="ax" x="${cx}" y="${H-B+38}" text-anchor="middle">${esc(shortDate(d.p.date))}</text>`;
+    if(d.val==null){s+=`<text class="ax" x="${cx}" y="${y(0)-8}" text-anchor="middle">absent</text>`;return;}
+    const cy=y(d.val);
+    s+=`<circle class="${d.isAssign?'pa':'pt'}" cx="${cx}" cy="${cy}" r="6"/><text class="vl" x="${cx}" y="${cy-12}" text-anchor="middle">${r0(d.val)}%</text>`;
+  });
+  const label=data.map(d=>`${d.p.title}${d.isAssign?' (assignment)':''}: ${d.val==null?'absent':r0(d.val)+'%'}`).join('; ');
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(label)}">${s}</svg>`;
+}
+function skillTable(data){
+  const ids=SKILLS.map(s=>s.id).filter(id=>data.some(d=>d.skills[id]!=null));
+  if(!ids.length)return '<p class="lead">No marks in these papers yet.</p>';
+  const weak={};data.forEach(d=>{weak[d.p.id]=weakestSkill(d.skills);});
+  return `<div class="table-wrap"><table class="trend">
+    <thead><tr><th>Skill</th>${data.map(d=>`<th class="num${d.isAssign?' assign':''}">${esc(d.p.title)}<br><span class="muted">${esc(shortDate(d.p.date))}</span></th>`).join('')}</tr></thead>
+    <tbody>${ids.map(id=>`<tr><th scope="row">${SKILL[id].name}</th>${data.map(d=>{
+      const v=d.skills[id];
+      if(d.val==null)return `<td class="num muted${d.isAssign?' assign':''}">absent</td>`;
+      if(v==null)return `<td class="num muted${d.isAssign?' assign':''}">–</td>`;
+      const w=weak[d.p.id]===id;
+      return `<td class="num${w?' weak':''}${d.isAssign?' assign':''}">${r0(v)}%${w?'<span class="sr">, weakest</span>':''}</td>`;
+    }).join('')}</tr>`).join('')}</tbody>
+  </table></div>`;
+}
+function renderTrends(el){
+  if(needPaper(el))return;
+  const classes=[...new Set(state.papers.map(p=>p.cls||'No class'))].sort(numCmp);
+  if(!ui.trendClass||!classes.includes(ui.trendClass))ui.trendClass=(cur()&&cur().cls)||classes[0];
+  const ps=state.papers.filter(p=>(p.cls||'No class')===ui.trendClass).sort(byDate);
+  const labels=[...new Set(ps.flatMap(p=>analyse(p).rows.map(r=>r.s.label)))].sort(numCmp);
+  if(ui.trendStudent&&!labels.includes(ui.trendStudent))ui.trendStudent='';
+  const data=trendData(ps,ui.trendStudent);
+  const {notes,actions}=trendNotes(data);
+  el.innerHTML=`
+  <div class="picker">
+    <label>Class <select id="trCls">${classes.map(c=>`<option${c===ui.trendClass?' selected':''}>${esc(c)}</option>`).join('')}</select></label>
+    <label>Show <select id="trStu"><option value="">Whole class</option>${labels.map(l=>`<option${l===ui.trendStudent?' selected':''}>${esc(l)}</option>`).join('')}</select></label>
+  </div>
+  <article class="report">
+    ${marginHtml(notes,actions)}
+    <div class="main">
+      <header class="report-head">
+        <div><h1>${esc(ui.trendStudent||ui.trendClass)}</h1><p class="meta">${ui.trendStudent?esc(ui.trendClass)+'. ':''}${ps.length} ${plural(ps.length,'paper')}, oldest first.</p></div>
+        ${printBtn()}
+      </header>
+      <section>
+        <h2>Score across papers</h2>
+        <p class="hint">Filled points are tests and exams, joined by the trend line. Hollow points are assignments, left off the line because take-home work isn't comparable with timed papers.</p>
+        <div class="chart-wrap">${lineChart(data)}</div>
+      </section>
+      <section>
+        <h2>Skills across papers</h2>
+        <p class="hint">The weakest skill on each paper is underlined in red. Assignments are in italics.</p>
+        ${skillTable(data)}
+      </section>
+    </div>
+  </article>`;
+}
+
+/* ---------- CSV and backup ---------- */
+const csvCell=v=>{const s=String(v==null?'':v);return /[",\r\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;};
+function csvFor(p){
+  const a=analyse(p);
+  const head=['Student',...p.questions.map(q=>`Q${q.no} (/${fmtNum(q.max)})`),'Total','Percent','Grade','Position'];
+  const lines=p.students.map(s=>{
+    const m=marksOf(p,s.id);const row=a.rows.find(x=>x.s.id===s.id);
+    return [s.label,...p.questions.map(q=>isNum(m[q.id])?m[q.id]:''),row?fmtNum(row.earned):'Absent',row?r0(row.pct):'',row?row.grade:'',row?row.pos:''];
+  });
+  return '\ufeff'+[head,...lines].map(r=>r.map(csvCell).join(',')).join('\r\n');
+}
+async function importFile(file){
+  try{
+    const data=JSON.parse(await file.text());
+    const list=Array.isArray(data)?data:data&&data.papers;
+    if(!Array.isArray(list))throw new Error('shape');
+    let count=0;
+    list.map(normalizePaper).filter(Boolean).forEach(p=>{
+      const i=state.papers.findIndex(x=>x.id===p.id);
+      if(i>=0)state.papers[i]=p;else state.papers.push(p);
+      count++;
+    });
+    if(!count)throw new Error('empty');
+    if(!cur())state.currentId=state.papers[0].id;
+    save();render();
+    toast(`Imported ${count} ${plural(count,'paper')}.`);
+  }catch(e){toast("That file isn't a BnB Alama backup. Choose a .json file exported from BnB Alama.");}
+}
+function confirmStep(btn,label,fn){
+  if(btn.dataset.armed){fn();return;}
+  const orig=btn.textContent;btn.dataset.armed='1';btn.textContent=label;
+  setTimeout(()=>{if(btn.isConnected&&btn.dataset.armed){delete btn.dataset.armed;btn.textContent=orig;}},4000);
+}
+
+/* ---------- events ---------- */
+const view=$('#view');
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const d=b.dataset;
+  if(d.tab){ui.tab=d.tab;render();return;}
+  if(d.go){ui.tab=d.go;render();window.scrollTo(0,0);return;}
+  if(d.open){state.currentId=d.open;save();ui.tab='class';render();window.scrollTo(0,0);return;}
+  if(d.dup){
+    const src=state.papers.find(p=>p.id===d.dup);if(!src)return;
+    const np={...src,id:uid(),title:src.title+' (copy)',questions:src.questions.map(q=>({...q})),students:src.students.map(s=>({...s})),marks:{}};
+    np.students.forEach(s=>np.marks[s.id]={});
+    state.papers.push(np);state.currentId=np.id;save();ui.tab='questions';render();
+    toast('Copied the questions and students. Marks start empty.');return;
+  }
+  if(d.del){
+    confirmStep(b,'Confirm delete',()=>{
+      state.papers=state.papers.filter(p=>p.id!==d.del);
+      if(state.currentId===d.del)state.currentId=state.papers[0]?state.papers[0].id:null;
+      save();render();toast('Paper deleted.');
+    });return;
+  }
+  if(d.qsort){ui.qSort=d.qsort;render();return;}
+  if(d.step){
+    const p=cur();const a=analyse(p);const rows=[...a.rows].sort((x,y)=>numCmp(x.s.label,y.s.label));
+    const i=rows.findIndex(r=>r.s.id===ui.studentId[p.id]);const next=rows[i+Number(d.step)];
+    if(next){ui.studentId[p.id]=next.s.id;render();}
+    return;
+  }
+  if('qdel' in d){
+    const p=cur();const q=p.questions[+d.qdel];if(!q)return;
+    p.questions.splice(+d.qdel,1);Object.values(p.marks).forEach(m=>{delete m[q.id];});
+    save();render();return;
+  }
+  if('sdel' in d){
+    confirmStep(b,'Confirm',()=>{
+      const p=cur();const s=p.students[+d.sdel];if(!s)return;
+      p.students.splice(+d.sdel,1);delete p.marks[s.id];save();render();
+    });return;
+  }
+  switch(b.id){
+    case 'clearSample':state={v:1,sample:false,currentId:null,papers:[]};ui.tab='papers';save();render();toast('Sample cleared. Create your first paper below.');break;
+    case 'hideBanner':ui.hideBanner=true;renderHeader();break;
+    case 'npCreate':{
+      const src=state.papers.find(p=>p.id===$('#npCopy').value);
+      const np={id:uid(),title:$('#npTitle').value.trim()||'Untitled paper',cls:$('#npClass').value.trim(),subject:$('#npSubject').value.trim(),type:$('#npType').value,date:$('#npDate').value,questions:[],students:src?src.students.map(s=>({...s})):[],marks:{}};
+      np.students.forEach(s=>np.marks[s.id]={});
+      state.papers.push(np);state.currentId=np.id;save();ui.tab='questions';render();window.scrollTo(0,0);
+      toast('Paper created. Add its questions next.');break;
+    }
+    case 'addQ':case 'addQ5':{
+      const p=cur();addQuestions(p,b.id==='addQ5'?5:1);save();render();
+      const inputs=view.querySelectorAll('input[data-qf="topic"]');const f=inputs[inputs.length-(b.id==='addQ5'?5:1)];if(f)f.focus();
+      break;
+    }
+    case 'addS':{
+      const p=cur();const n=Math.min(200,Math.max(1,parseInt($('#addN').value,10)||1));
+      addStudents(p,n);save();render();break;
+    }
+    case 'csvBtn':{const p=cur();saveFile(slug((p.cls||'')+' '+p.title)+'-results.csv',csvFor(p),'text/csv');break;}
+    case 'exportBtn':saveFile('bnb-alama-backup-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({app:'BnB Alama',v:1,exported:new Date().toISOString(),papers:state.papers},null,1),'application/json');break;
+    case 'importBtn':$('#importFile').click();break;
+    case 'wipeBtn':confirmStep(b,'Confirm: delete everything',()=>{state={v:1,sample:false,currentId:null,papers:[]};save();ui.tab='papers';render();toast('All data deleted.');});break;
+    case 'printBtn':window.print();break;
+  }
+});
+view.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.closest('.grid')&&t.matches('input')){onGridInput(t);return;}
+  const p=cur();if(!p)return;
+  if(t.dataset.qf){
+    const q=p.questions[+t.dataset.i];if(!q)return;
+    if(t.dataset.qf==='max'){
+      const res=parseMark(t.value);
+      if(res.value!=null&&res.value>0){q.max=res.value;t.removeAttribute('aria-invalid');}else t.setAttribute('aria-invalid','true');
+      updateQTotal();
+    }else q[t.dataset.qf]=t.value;
+    save();return;
+  }
+  if(t.dataset.pf){p[t.dataset.pf]=t.value;save();renderHeader();}
+});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.id==='paperSel'){state.currentId=t.value;save();render();return;}
+  if(t.id==='stuSel'){ui.studentId[cur().id]=t.value;render();return;}
+  if(t.id==='trCls'){ui.trendClass=t.value;ui.trendStudent='';render();return;}
+  if(t.id==='trStu'){ui.trendStudent=t.value;render();return;}
+  if(t.id==='importFile'&&t.files&&t.files[0]){importFile(t.files[0]);t.value='';return;}
+  if(t.tagName==='SELECT'&&(t.dataset.qf||t.dataset.pf))view.dispatchEvent(new Event('input',{bubbles:true}))||0;
+});
+view.addEventListener('keydown',e=>{
+  const t=e.target;if(!(t.closest('.grid')&&t.matches('input')))return;
+  const r=+t.dataset.r,c=+t.dataset.c;let nr=r,nc=c;
+  if(e.key==='Enter')nr=r+(e.shiftKey?-1:1);
+  else if(e.key==='ArrowDown')nr=r+1;
+  else if(e.key==='ArrowUp')nr=r-1;
+  else if(e.key==='ArrowRight'&&t.selectionStart===t.value.length&&t.selectionEnd===t.value.length)nc=c+1;
+  else if(e.key==='ArrowLeft'&&t.selectionStart===0&&t.selectionEnd===0)nc=c-1;
+  else return;
+  const next=view.querySelector(`.grid input[data-r="${nr}"][data-c="${nc}"]`);
+  if(next){e.preventDefault();next.focus();next.select();}
+});
+view.addEventListener('paste',e=>{
+  const t=e.target;if(!(t.closest('.grid')&&t.matches('input')))return;
+  const text=(e.clipboardData||window.clipboardData).getData('text');if(!text)return;
+  const lines=text.replace(/\r/g,'').split('\n');
+  while(lines.length&&lines[lines.length-1].trim()==='')lines.pop();
+  if(lines.length<=1&&!(lines[0]||'').includes('\t'))return;
+  e.preventDefault();
+  const p=cur();const r0_=+t.dataset.r,c0=+t.dataset.c;
+  const need=r0_+lines.length-p.students.length;if(need>0)addStudents(p,need);
+  let flagged=0;
+  lines.forEach((line,i)=>{
+    const s=p.students[r0_+i];const m=marksOf(p,s.id);
+    line.split('\t').forEach((val,j)=>{
+      const c=c0+j;
+      if(c===0){if(val.trim())s.label=val.trim();return;}
+      const q=p.questions[c-1];if(!q)return;
+      const res=parseMark(val);
+      if(res.empty)delete m[q.id];
+      else if(res.invalid){delete m[q.id];flagged++;}
+      else{m[q.id]=res.value;if(res.value>q.max||res.value<0)flagged++;}
+    });
+  });
+  save();render();
+  const back=view.querySelector(`.grid input[data-r="${r0_}"][data-c="${c0}"]`);if(back)back.focus();
+  toast(`Pasted ${lines.length} ${plural(lines.length,'row')}.${flagged?` ${flagged} ${plural(flagged,'value needs','values need')} checking.`:''}`);
+});
+
+if(!storageOk)noteStorage();
+render();
+})();
+</script>
+</body>
+</html>
